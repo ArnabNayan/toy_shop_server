@@ -33,6 +33,7 @@ async function run() {
     const cartCollection = client.db("toyDB").collection("carts")
     const userCollection = client.db("toyDB").collection("users");
     const paymentCollection = client.db("toyDB").collection("payments")
+    const reviewsCollection = client.db("toyDB").collection("reviews")
 
 //jwt related api
 app.post('/jwt',async(req,res)=>{
@@ -354,6 +355,17 @@ app.get('/order-stats',verifyToken,verifyAdmin, async(req,res)=>{
   ]).toArray()
   res.send(result);
 })
+
+app.post('/reviews', async (req, res) => {
+    const review = req.body;
+    const result = await reviewsCollection.insertOne(review);
+    res.send(result);
+});
+
+app.get('/reviews', async (req, res) => {
+    const result = await reviewsCollection.find().toArray();
+    res.send(result);
+});
     // Send a ping to confirm a successful connection
     // await client.db("admin").command({ ping: 1 });
     // console.log("You successfully connected to MongoDB!");
